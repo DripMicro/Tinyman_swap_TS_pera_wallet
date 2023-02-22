@@ -37,6 +37,9 @@ export default function PeraWalletConnection() {
       {accountAddress}
       <br/>
       <br/>
+
+      <input type="text" />
+      <input type="text" />
     </div>
   );
 
