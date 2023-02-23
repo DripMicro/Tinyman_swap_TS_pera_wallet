@@ -55,6 +55,8 @@ export async function fixedOutputSwap({
     assetOut,
     slippage: 0.05
   });
+
+  
   const signedTxns = await Swap.v2.signTxns({
     txGroup: fixedOutputSwapTxns,
     initiatorSigner: signerWithSecretKey(account)
