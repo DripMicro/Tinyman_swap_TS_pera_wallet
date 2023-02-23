@@ -5,6 +5,6 @@ console.log(
 );
 export const algodClient = new algosdk.Algodv2(
   "",
-  "https://api.algoexplorer.io",
+  "https://node.algoexplorerapi.io/",
   ""
 );
