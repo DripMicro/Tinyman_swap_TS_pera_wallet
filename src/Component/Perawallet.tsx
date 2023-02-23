@@ -13,8 +13,8 @@ export default function PeraWalletConnection() {
     setInputValue(event.target.value);
     console.log(event.target.value);
     const account:string = accountAddress as string;
-    const asset1:string = "0";
-    const asset2:string = "31566704";
+    const asset1:string = "27165954";
+    const asset2:string = "523683256";
     await fixedInputSwap({account: account, asset_1: asset1, asset_2:asset2});
   };
 
