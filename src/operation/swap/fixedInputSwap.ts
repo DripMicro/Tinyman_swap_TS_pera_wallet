@@ -13,16 +13,16 @@ export async function fixedInputSwap({
   asset_1,
   asset_2
 }: {
-  account: Account;
-  asset_1: {id: string; unit_name: string};
-  asset_2: {id: string; unit_name: string};
+  account: string;
+  asset_1: string;
+  asset_2: string;
 }) {
-  const initiatorAddr = account.addr;
+  const initiatorAddr = account;
   const pool = await poolUtils.v2.getPoolInfo({
-    network: "testnet" as SupportedNetwork,
+    network: "mainnet" as SupportedNetwork,
     client: algodClient,
-    asset1ID: Number(asset_1.id),
-    asset2ID: Number(asset_2.id)
+    asset1ID: Number(asset_1),
+    asset2ID: Number(asset_2)
   });
 
   /**
@@ -30,8 +30,6 @@ export async function fixedInputSwap({
    * Swap.getQuote method, which will return the best quote (highest rate)
    * after checking both v1 and v2
    */
-  console.log("fixedInputSwapQuote");
-
   const fixedInputSwapQuote = Swap.v2.getQuote(
     SwapType.FixedInput,
     pool,
@@ -47,45 +45,33 @@ export async function fixedInputSwap({
     amount: fixedInputSwapQuote.assetOutAmount
   };
 
-  console.log("fixedInputSwapTxns");
+  console.log(assetIn.amount);
+  console.log(assetOut.amount);
 
-  console.log("client : " + algodClient);
-  console.log("swapType : " + SwapType.FixedInput);
-  console.log("pool : " + pool);
-  console.log("initiatorAddr : " + initiatorAddr);
-  console.log("assetIn : " + assetIn.amount);
-  console.log("assetIn : " + assetIn.id);
-  console.log("assetOut : " + assetOut.amount);
-  console.log("assetOut : " + assetOut.id);
-    
-  const fixedInputSwapTxns = await Swap.v2.generateTxns({
-    client: algodClient,
-    swapType: SwapType.FixedInput,
-    pool,
-    initiatorAddr,
-    assetIn,
-    assetOut,
-    slippage: 0.05
-  });
+  // const fixedInputSwapTxns = await Swap.v2.generateTxns({
+  //   client: algodClient,
+  //   swapType: SwapType.FixedInput,
+  //   pool,
+  //   initiatorAddr,
+  //   assetIn,
+  //   assetOut,
+  //   slippage: 0.05
+  // });
 
-  console.log("signedTxns");
+  // const signedTxns = await Swap.v2.signTxns({
+  //   txGroup: fixedInputSwapTxns,
+  //   initiatorSigner: signerWithSecretKey(account)
+  // });
 
-  const signedTxns = await Swap.v2.signTxns({
-    txGroup: fixedInputSwapTxns,
-    initiatorSigner: signerWithSecretKey(account)
-  });
-
-  console.log("swapExecutionResponse");
-
-  const swapExecutionResponse = await Swap.v2.execute({
-    network: "testnet" as SupportedNetwork,
-    client: algodClient,
-    signedTxns,
-    pool,
-    txGroup: fixedInputSwapTxns,
-    assetIn
-  });
+  // const swapExecutionResponse = await Swap.v2.execute({
+  //   network: "testnet" as SupportedNetwork,
+  //   client: algodClient,
+  //   signedTxns,
+  //   pool,
+  //   txGroup: fixedInputSwapTxns,
+  //   assetIn
+  // });
 
   console.log("✅ Fixed Input Swap executed successfully!");
-  console.log({txnID: swapExecutionResponse.txnID});
+  // console.log({txnID: swapExecutionResponse.txnID});
 }
