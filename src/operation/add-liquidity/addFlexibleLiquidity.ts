@@ -4,12 +4,12 @@ import {
   generateOptIntoAssetTxns,
   poolUtils,
   SupportedNetwork
-} from "@tinymanorg/tinyman-js-sdk";
-import {Account} from "algosdk";
+} from '@tinymanorg/tinyman-js-sdk';
+import { Account } from 'algosdk';
 
-import {getIsAccountOptedIntoAsset} from "../../util/asset";
-import {algodClient} from "../../util/client";
-import signerWithSecretKey from "../../util/initiatorSigner";
+import { getIsAccountOptedIntoAsset } from '../../util/asset';
+import { algodClient } from '../../util/client';
+import signerWithSecretKey from '../../util/initiatorSigner';
 
 /**
  * Adds liquidity to an existent pool using the flexible mode
@@ -20,12 +20,12 @@ export async function addFlexibleLiquidity({
   asset_2
 }: {
   account: Account;
-  asset_1: {id: string; unit_name: string};
-  asset_2: {id: string; unit_name: string};
+  asset_1: { id: string; unit_name: string };
+  asset_2: { id: string; unit_name: string };
 }) {
   const initiatorAddr = account.addr;
   const poolInfo = await poolUtils.v2.getPoolInfo({
-    network: "testnet" as SupportedNetwork,
+    network: 'testnet' as SupportedNetwork,
     client: algodClient,
     asset1ID: Number(asset_1.id),
     asset2ID: Number(asset_2.id)
@@ -45,7 +45,7 @@ export async function addFlexibleLiquidity({
   });
 
   let addFlexibleLiqTxns = await AddLiquidity.v2.flexible.generateTxns({
-    network: "testnet" as SupportedNetwork,
+    network: 'testnet' as SupportedNetwork,
     client: algodClient,
     initiatorAddr,
     poolAddress: poolInfo.account.address(),
@@ -82,6 +82,6 @@ export async function addFlexibleLiquidity({
     pool: poolInfo
   });
 
-  console.log("✅ Add Flexible Liquidity executed successfully!");
-  console.log({txnID: executionResponse.txnID});
+  console.log('✅ Add Flexible Liquidity executed successfully!');
+  console.log({ txnID: executionResponse.txnID });
 }

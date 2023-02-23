@@ -1,8 +1,8 @@
-import {poolUtils, SupportedNetwork, Swap, SwapType} from "@tinymanorg/tinyman-js-sdk";
-import {Account} from "algosdk";
+import { poolUtils, SupportedNetwork, Swap, SwapType } from '@tinymanorg/tinyman-js-sdk';
+import { Account } from 'algosdk';
 
-import {algodClient} from "../../util/client";
-import signerWithSecretKey from "../../util/initiatorSigner";
+import { algodClient } from '../../util/client';
+import signerWithSecretKey from '../../util/initiatorSigner';
 
 /**
  * Executes a swap with a fixed output amount
@@ -14,12 +14,12 @@ export async function fixedOutputSwap({
   asset_2
 }: {
   account: Account;
-  asset_1: {id: string; unit_name: string};
-  asset_2: {id: string; unit_name: string};
+  asset_1: { id: string; unit_name: string };
+  asset_2: { id: string; unit_name: string };
 }) {
   const initiatorAddr = account.addr;
   const pool = await poolUtils.v2.getPoolInfo({
-    network: "testnet" as SupportedNetwork,
+    network: 'testnet' as SupportedNetwork,
     client: algodClient,
     asset1ID: Number(asset_1.id),
     asset2ID: Number(asset_2.id)
@@ -33,8 +33,8 @@ export async function fixedOutputSwap({
   const fixedOutputSwapQuote = Swap.v2.getQuote(
     SwapType.FixedOutput,
     pool,
-    {id: pool.asset2ID, amount: 1_000_000},
-    {assetIn: 6, assetOut: 6}
+    { id: pool.asset2ID, amount: 1_000_000 },
+    { assetIn: 6, assetOut: 6 }
   );
 
   const assetIn = {
@@ -56,13 +56,12 @@ export async function fixedOutputSwap({
     slippage: 0.05
   });
 
-  
   const signedTxns = await Swap.v2.signTxns({
     txGroup: fixedOutputSwapTxns,
     initiatorSigner: signerWithSecretKey(account)
   });
   const swapExecutionResponse = await Swap.v2.execute({
-    network: "testnet" as SupportedNetwork,
+    network: 'testnet' as SupportedNetwork,
     client: algodClient,
     signedTxns,
     txGroup: fixedOutputSwapTxns,
@@ -70,6 +69,6 @@ export async function fixedOutputSwap({
     assetIn
   });
 
-  console.log("✅ Fixed Output Swap executed successfully!");
-  console.log({txnID: swapExecutionResponse.txnID});
+  console.log('✅ Fixed Output Swap executed successfully!');
+  console.log({ txnID: swapExecutionResponse.txnID });
 }

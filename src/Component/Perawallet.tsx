@@ -1,6 +1,6 @@
-import { useState, useEffect, ChangeEvent, MouseEvent  } from "react";
-import { PeraWalletConnect } from "@perawallet/connect";
-import {fixedInputSwap} from "../operation/swap/fixedInputSwap";
+import { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
+import { PeraWalletConnect } from '@perawallet/connect';
+import { fixedInputSwap } from '../operation/swap/fixedInputSwap';
 
 const peraWallet = new PeraWalletConnect();
 
@@ -12,10 +12,10 @@ export default function PeraWalletConnection() {
   const handleInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
     console.log(event.target.value);
-    const account:string = accountAddress as string;
-    const asset1:string = "27165954";
-    const asset2:string = "523683256";
-    await fixedInputSwap({account: account, asset_1: asset1, asset_2:asset2});
+    const account: string = accountAddress as string;
+    const asset1 = '0';
+    const asset2 = '523683256';
+    await fixedInputSwap({ account, asset_1: asset1, asset_2: asset2 });
   };
 
   const handleClick = (event: MouseEvent) => {
@@ -27,7 +27,7 @@ export default function PeraWalletConnection() {
     peraWallet
       .reconnectSession()
       .then((accounts) => {
-        peraWallet.connector?.on("disconnect", handleDisconnectWalletClick);
+        peraWallet.connector?.on('disconnect', handleDisconnectWalletClick);
 
         if (accounts.length) {
           setAccountAddress(accounts[0]);
@@ -38,27 +38,19 @@ export default function PeraWalletConnection() {
 
   return (
     <div>
-      <button
-        onClick={
-          isConnectedToPeraWallet
-            ? handleDisconnectWalletClick
-            : handleConnectWalletClick
-        }
-      >
-        {isConnectedToPeraWallet ? "Disconnect" : "Connect to Pera Wallet"}
+      <button onClick={isConnectedToPeraWallet ? handleDisconnectWalletClick : handleConnectWalletClick}>
+        {isConnectedToPeraWallet ? 'Disconnect' : 'Connect to Pera Wallet'}
       </button>
-      <br/>
-      <br/>
+      <br />
+      <br />
       {accountAddress}
-      <br/>
-      <br/>
-
+      <br />
+      <br />
       input asset <input type="text" />
       output asset <input type="text" />
       <br />
       input amount <input value={inputValue} onChange={handleInputChange} />
       output amount <input type="text" />
-
       <button onClick={handleClick}>Submit</button>
     </div>
   );
@@ -67,12 +59,12 @@ export default function PeraWalletConnection() {
     peraWallet
       .connect()
       .then((newAccounts) => {
-        peraWallet.connector?.on("disconnect", handleDisconnectWalletClick);
+        peraWallet.connector?.on('disconnect', handleDisconnectWalletClick);
 
         setAccountAddress(newAccounts[0]);
       })
       .catch((error) => {
-        if (error?.data?.type !== "CONNECT_MODAL_CLOSED") {
+        if (error?.data?.type !== 'CONNECT_MODAL_CLOSED') {
           console.log(error);
         }
       });

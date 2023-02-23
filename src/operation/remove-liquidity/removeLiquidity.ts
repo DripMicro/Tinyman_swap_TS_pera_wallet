@@ -1,9 +1,9 @@
-import {poolUtils, RemoveLiquidity, SupportedNetwork} from "@tinymanorg/tinyman-js-sdk";
-import {Account} from "algosdk";
+import { poolUtils, RemoveLiquidity, SupportedNetwork } from '@tinymanorg/tinyman-js-sdk';
+import { Account } from 'algosdk';
 
-import {getOwnedAssetAmount} from "../../util/account";
-import {algodClient} from "../../util/client";
-import signerWithSecretKey from "../../util/initiatorSigner";
+import { getOwnedAssetAmount } from '../../util/account';
+import { algodClient } from '../../util/client';
+import signerWithSecretKey from '../../util/initiatorSigner';
 
 /**
  * Removes a portion of owned liquidity from a pool
@@ -14,12 +14,12 @@ export async function removeLiquidity({
   asset_2
 }: {
   account: Account;
-  asset_1: {id: string; unit_name: string};
-  asset_2: {id: string; unit_name: string};
+  asset_1: { id: string; unit_name: string };
+  asset_2: { id: string; unit_name: string };
 }) {
   const initiatorAddr = account.addr;
   const poolInfo = await poolUtils.v2.getPoolInfo({
-    network: "testnet" as SupportedNetwork,
+    network: 'testnet' as SupportedNetwork,
     client: algodClient,
     asset1ID: Number(asset_1.id),
     asset2ID: Number(asset_2.id)
@@ -27,10 +27,7 @@ export async function removeLiquidity({
   const poolReserves = await poolUtils.v2.getPoolReserves(algodClient, poolInfo);
 
   // Get the owned pool token amount, so we can decide how much to remove
-  const ownedPoolTokenAssetAmount = await getOwnedAssetAmount(
-    initiatorAddr,
-    poolInfo.poolTokenID!
-  );
+  const ownedPoolTokenAssetAmount = await getOwnedAssetAmount(initiatorAddr, poolInfo.poolTokenID!);
 
   /**
    * For testing purposes, we will remove 1/4 of the owned pool tokens,
@@ -66,7 +63,7 @@ export async function removeLiquidity({
     signedTxns
   });
 
-  console.log("✅ Remove Liquidity executed successfully!");
+  console.log('✅ Remove Liquidity executed successfully!');
   console.log({
     outputAssets: JSON.stringify(executionResponse.outputAssets),
     txnID: executionResponse.txnID

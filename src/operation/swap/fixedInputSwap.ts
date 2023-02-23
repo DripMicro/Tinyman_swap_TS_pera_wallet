@@ -1,8 +1,8 @@
-import {poolUtils, SupportedNetwork, Swap, SwapType} from "@tinymanorg/tinyman-js-sdk";
-import {Account} from "algosdk";
+import { poolUtils, SupportedNetwork, Swap, SwapType } from '@tinymanorg/tinyman-js-sdk';
+import { Account } from 'algosdk';
 
-import {algodClient} from "../../util/client";
-import signerWithSecretKey from "../../util/initiatorSigner";
+import { algodClient } from '../../util/client';
+import signerWithSecretKey from '../../util/initiatorSigner';
 
 /**
  * Executes a swap with a fixed input amount
@@ -19,7 +19,7 @@ export async function fixedInputSwap({
 }) {
   const initiatorAddr = account;
   const pool = await poolUtils.v2.getPoolInfo({
-    network: "mainnet" as SupportedNetwork,
+    network: 'mainnet' as SupportedNetwork,
     client: algodClient,
     asset1ID: Number(asset_1),
     asset2ID: Number(asset_2)
@@ -33,8 +33,8 @@ export async function fixedInputSwap({
   const fixedInputSwapQuote = Swap.v2.getQuote(
     SwapType.FixedInput,
     pool,
-    {id: pool.asset1ID, amount: 1_000_000},
-    {assetIn: 6, assetOut: 6}
+    { id: pool.asset1ID, amount: 1_000_000 },
+    { assetIn: 6, assetOut: 6 }
   );
   const assetIn = {
     id: fixedInputSwapQuote.assetInID,
@@ -72,6 +72,6 @@ export async function fixedInputSwap({
   //   assetIn
   // });
 
-  console.log("✅ Fixed Input Swap executed successfully!");
+  console.log('✅ Fixed Input Swap executed successfully!');
   // console.log({txnID: swapExecutionResponse.txnID});
 }

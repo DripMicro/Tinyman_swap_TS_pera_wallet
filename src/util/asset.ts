@@ -1,18 +1,11 @@
-import {
-  ALGO_ASSET_ID,
-  getAccountInformation,
-} from "@tinymanorg/tinyman-js-sdk";
-import {
-  Account,
-  makeAssetCreateTxnWithSuggestedParamsFromObject,
-  waitForConfirmation,
-} from "algosdk";
-import { writeFileSync, readFileSync } from "fs";
-import { getAccount } from "./account";
-import { algodClient } from "./client";
-import { assertAccountHasBalance } from "./other";
+import { ALGO_ASSET_ID, getAccountInformation } from '@tinymanorg/tinyman-js-sdk';
+import { Account, makeAssetCreateTxnWithSuggestedParamsFromObject, waitForConfirmation } from 'algosdk';
+import { writeFileSync, readFileSync } from 'fs';
+import { getAccount } from './account';
+import { algodClient } from './client';
+import { assertAccountHasBalance } from './other';
 
-export const ASSETS_FILENAME = "assets.json";
+export const ASSETS_FILENAME = 'assets.json';
 
 type Assets = { ids: [number, number] };
 
@@ -23,7 +16,7 @@ export async function getAssetParams() {
   const assetB = await algodClient.getAssetByID(asset2ID).do();
   const [asset_1, asset_2] = [assetA, assetB].map((asset) => ({
     id: String(asset.index),
-    unit_name: asset.params["unit-name"],
+    unit_name: asset.params['unit-name']
   }));
 
   return { asset_1, asset_2 };
@@ -47,7 +40,7 @@ export async function getAssets(): Promise<Assets> {
 
     assets = { ids: [ASSET_A_ID, ASSET_B_ID] };
 
-    console.log("✅ Assets created: " + JSON.stringify(assets.ids));
+    console.log(`✅ Assets created: ${JSON.stringify(assets.ids)}`);
 
     writeFileSync(ASSETS_FILENAME, JSON.stringify(assets));
   }
@@ -69,7 +62,7 @@ function tryGetAssetsFromJson() {
  */
 export async function createAsset(account: Account) {
   const suggestedParams = await algodClient.getTransactionParams().do();
-  const assetName = "A_" + Math.random().toString(36).substring(2, 8);
+  const assetName = `A_${Math.random().toString(36).substring(2, 8)}`;
   const maxTotal = BigInt(2 ** 64) - BigInt(1);
   const txn = makeAssetCreateTxnWithSuggestedParamsFromObject({
     from: account.addr,
@@ -78,27 +71,24 @@ export async function createAsset(account: Account) {
     decimals: 6,
     defaultFrozen: false,
     unitName: assetName,
-    assetName,
+    assetName
   });
   const signedTxn = txn.signTxn(account.sk);
   const { txId } = await algodClient.sendRawTransaction(signedTxn).do();
   const result = await waitForConfirmation(algodClient, txId, 1000);
-  const assetId = result["asset-index"];
+  const assetId = result['asset-index'];
 
-  console.log("✅ Asset created: " + assetId);
+  console.log(`✅ Asset created: ${assetId}`);
 
   return assetId;
 }
 
-export async function getIsAccountOptedIntoAsset(
-  accountAddress: string,
-  assetId: number
-): Promise<Boolean> {
+export async function getIsAccountOptedIntoAsset(accountAddress: string, assetId: number): Promise<boolean> {
   if (assetId === ALGO_ASSET_ID) {
     return true;
   }
 
   return (await getAccountInformation(algodClient, accountAddress)).assets.some(
-    (asset) => asset["asset-id"] === assetId
+    (asset) => asset['asset-id'] === assetId
   );
 }

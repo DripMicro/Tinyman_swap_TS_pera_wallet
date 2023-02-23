@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { PeraWalletConnect } from "@perawallet/connect";
+import { useState, useEffect } from 'react';
+import { PeraWalletConnect } from '@perawallet/connect';
 
 const peraWallet = new PeraWalletConnect();
 
@@ -12,7 +12,7 @@ export default function PeraWalletConnection() {
     peraWallet
       .reconnectSession()
       .then((accounts) => {
-        peraWallet.connector?.on("disconnect", handleDisconnectWalletClick);
+        peraWallet.connector?.on('disconnect', handleDisconnectWalletClick);
 
         if (accounts.length) {
           setAccountAddress(accounts[0]);
@@ -23,20 +23,14 @@ export default function PeraWalletConnection() {
 
   return (
     <div>
-      <button
-        onClick={
-          isConnectedToPeraWallet
-            ? handleDisconnectWalletClick
-            : handleConnectWalletClick
-        }
-      >
-        {isConnectedToPeraWallet ? "Disconnect" : "Connect to Pera Wallet"}
+      <button onClick={isConnectedToPeraWallet ? handleDisconnectWalletClick : handleConnectWalletClick}>
+        {isConnectedToPeraWallet ? 'Disconnect' : 'Connect to Pera Wallet'}
       </button>
-      <br/>
-      <br/>
+      <br />
+      <br />
       {accountAddress}
-      <br/>
-      <br/>
+      <br />
+      <br />
 
       <input type="text" />
       <input type="text" />
@@ -47,12 +41,12 @@ export default function PeraWalletConnection() {
     peraWallet
       .connect()
       .then((newAccounts) => {
-        peraWallet.connector?.on("disconnect", handleDisconnectWalletClick);
+        peraWallet.connector?.on('disconnect', handleDisconnectWalletClick);
 
         setAccountAddress(newAccounts[0]);
       })
       .catch((error) => {
-        if (error?.data?.type !== "CONNECT_MODAL_CLOSED") {
+        if (error?.data?.type !== 'CONNECT_MODAL_CLOSED') {
           console.log(error);
         }
       });
